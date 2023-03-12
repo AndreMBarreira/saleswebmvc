@@ -6,6 +6,9 @@ builder.Services.AddDbContext<SaleWebMvcContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SaleWebMvcContext"),
     builder => builder.MigrationsAssembly("SaleWebMvc")));
 
+//Injecao de dependencia do SEEDING
+builder.Services.AddScoped<SeedingService>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -17,6 +20,13 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+//Servico de seeding automatico em ambiente de desenvolvimento
+else 
+{
+    app.Services.CreateScope().ServiceProvider
+        .GetRequiredService<SeedingService>()
+        .Seed();
 }
 
 app.UseHttpsRedirection();

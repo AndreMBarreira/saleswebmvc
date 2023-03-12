@@ -16,6 +16,15 @@
         {
         }
 
+        public Seller(string name, string email, DateTime bithDate, double baseSalary, Department department)
+        {
+            Name = name;
+            Email = email;
+            BithDate = bithDate;
+            BaseSalary = baseSalary;
+            Department = department;
+        }
+
         public Seller(int id, string name, string email, DateTime bithDate, double baseSalary, Department department)
         {
             Id = id;
