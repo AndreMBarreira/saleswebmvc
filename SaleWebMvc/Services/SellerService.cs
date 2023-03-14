@@ -1,4 +1,5 @@
-﻿using SaleWebMvc.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SaleWebMvc.Data;
 using SaleWebMvc.Models;
 
 namespace SaleWebMvc.Services
@@ -19,7 +20,6 @@ namespace SaleWebMvc.Services
 
         public void Insert(Seller obj)
         {
-            obj.Department = _context.Department.First();
             _context.Add(obj);
             _context.SaveChanges();
         }

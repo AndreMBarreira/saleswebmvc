@@ -13,6 +13,7 @@ builder.Services.AddScoped<SeedingService>();
 
 //Injecao de dependencia das Classes de Servicos
 builder.Services.AddScoped<SellerService>();
+builder.Services.AddScoped<DepartmentService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
