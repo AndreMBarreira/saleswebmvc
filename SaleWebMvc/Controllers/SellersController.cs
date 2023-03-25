@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using SaleWebMvc.Migrations;
 using SaleWebMvc.Models;
 using SaleWebMvc.Models.ViewModels;
 using SaleWebMvc.Services;
@@ -19,10 +21,43 @@ namespace SaleWebMvc.Controllers
             _departmentService = departmentService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            var list = await _sellerService.FindAllAsync();
-            return View(list);
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            var sellers = await _sellerService.Find();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                sellers = sellers.Where(c => c.Name.Contains(searchString)
+                || c.Email.Contains(searchString));
+            }
+
+            if (sellers != null)
+            {
+                switch (sortOrder)
+                {
+                    case "name_desc":
+                        sellers = sellers.OrderByDescending(c => c.Name);
+                        break;
+                    case "Date":
+                        sellers = sellers.OrderBy(c => c.BithDate);
+                        break;
+                    case "date_desc":
+                        sellers = sellers.OrderByDescending(c => c.BithDate);
+                        break;
+                    default:
+                        sellers = sellers.OrderBy(c => c.Name);
+                        break;
+                }
+
+            }
+            
+
+            return View(sellers);
+
+            //var list = await _sellerService.FindAllAsync();
+            //return View(list);
         }
 
         public async Task<IActionResult> Create()

@@ -31,7 +31,7 @@ namespace SaleWebMvc.Data
             Department d3 = new Department("Fashion");
             Department d4 = new Department("Books");
 
-            Seller s1 = new Seller("Bob Brown", "bob@gmail.com", new DateTime(1998, 4, 21), 1000.0, 1, d1);
+            Seller s1 = new Seller("Bob Brown", "bob@gmail.com", new DateTime(1982, 2, 23), 1000.0, 1, d1);
             Seller s2 = new Seller("Maria Green", "maria@gmail.com", new DateTime(1979, 12, 31), 3500.0, 2, d2);
             Seller s3 = new Seller("Alex Grey", "alex@gmail.com", new DateTime(1988, 1, 15), 2200.0, 1, d1);
             Seller s4 = new Seller("Martha Red", "martha@gmail.com", new DateTime(1993, 11, 30), 3000.0, 4, d4);

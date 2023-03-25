@@ -13,6 +13,10 @@ namespace SaleWebMvc.Services
         {
             _context = context;
         }
+        public async Task<IQueryable<Seller>> Find()
+        {
+            return from s in _context.Seller select s;
+        }
 
         public async Task<List<Seller>> FindAllAsync()
         {
