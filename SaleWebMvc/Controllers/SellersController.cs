@@ -21,10 +21,27 @@ namespace SaleWebMvc.Controllers
             _departmentService = departmentService;
         }
 
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(
+                 string sortOrder,
+                 string currentFilter,
+                 string searchString,
+                 int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
             var sellers = await _sellerService.Find();
 
             if (!String.IsNullOrEmpty(searchString))
@@ -52,9 +69,9 @@ namespace SaleWebMvc.Controllers
                 }
 
             }
-            
 
-            return View(sellers);
+            int pageSize = 3;
+            return View(await PaginatedList<Seller>.CreateAsync(sellers.AsNoTracking(), pageNumber ?? 1, pageSize));
 
             //var list = await _sellerService.FindAllAsync();
             //return View(list);

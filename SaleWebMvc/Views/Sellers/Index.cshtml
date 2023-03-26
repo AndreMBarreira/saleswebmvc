@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SaleWebMvc.Models.Seller>
+﻿@model PaginatedList<SaleWebMvc.Models.Seller>
 
 @{
     ViewData["Title"] = "Sellers";
@@ -23,16 +23,16 @@
     <thead>
         <tr class="table-success">
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Name)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                Email
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">@Html.DisplayNameFor(model => model.BithDate)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">BithDate</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BaseSalary)
+                BaseSalary
             </th>
             <th></th>
         </tr>
@@ -57,8 +57,25 @@
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Details</a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Delete</a>
+
                 </td>
             </tr>
         }
     </tbody>
 </table>
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">Previous</a>
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">Next</a>

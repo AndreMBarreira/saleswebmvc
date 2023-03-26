@@ -20,10 +20,26 @@ namespace SaleWebMvc.Controllers
         }
 
         // GET: Clients
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber
+            )
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else 
+            {
+                searchString = currentFilter; 
+            }
+
             ViewData["CurrentFilter"] = searchString;
 
             var clients = from c in _context.Client select c;
@@ -49,8 +65,9 @@ namespace SaleWebMvc.Controllers
                     clients = clients.OrderBy(c => c.LastName);
                     break;
             }
-            
-            return View(await clients.AsNoTracking().ToListAsync());
+
+            int pageSize = 3;
+            return View(await PaginatedList<Client>.CreateAsync(clients.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Clients/Details/5
