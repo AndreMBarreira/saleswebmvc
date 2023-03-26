@@ -29,7 +29,9 @@ namespace SaleWebMvc.Controllers
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["EmailSortParm"] = sortOrder == "email" ? "email_desc" : "email";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["BaseSalarySortParm"] = sortOrder == "basesalary" ? "basesalary_desc" : "basesalary";
 
             if (searchString != null)
             {
@@ -47,7 +49,9 @@ namespace SaleWebMvc.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 sellers = sellers.Where(c => c.Name.Contains(searchString)
-                || c.Email.Contains(searchString));
+                || c.Email.Contains(searchString)
+                || c.BithDate.ToString().Contains(searchString)
+                || c.BaseSalary.ToString().Contains(searchString));
             }
 
             if (sellers != null)
@@ -62,6 +66,18 @@ namespace SaleWebMvc.Controllers
                         break;
                     case "date_desc":
                         sellers = sellers.OrderByDescending(c => c.BithDate);
+                        break;
+                    case "email":
+                        sellers = sellers.OrderBy(c => c.Email);
+                        break;
+                    case "email_desc":
+                        sellers = sellers.OrderByDescending(c => c.Email);
+                        break;
+                    case "basesalary":
+                        sellers = sellers.OrderBy(c => c.BaseSalary);
+                        break;
+                    case "basesalary_desc":
+                        sellers = sellers.OrderByDescending(c => c.BaseSalary);
                         break;
                     default:
                         sellers = sellers.OrderBy(c => c.Name);

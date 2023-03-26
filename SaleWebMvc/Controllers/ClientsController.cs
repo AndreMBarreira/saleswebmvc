@@ -30,6 +30,7 @@ namespace SaleWebMvc.Controllers
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["SecretSortParm"] = sortOrder == "secret" ? "secret_desc" : "secret";
 
             if (searchString != null)
             {
@@ -47,7 +48,8 @@ namespace SaleWebMvc.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 clients = clients.Where(c => c.LastName.Contains(searchString) 
-                || c.FirstName.Contains(searchString));
+                || c.FirstName.Contains(searchString)
+                || c.EnrollmentDate.ToString().Contains(searchString));
             }
 
             switch (sortOrder)
@@ -60,6 +62,12 @@ namespace SaleWebMvc.Controllers
                     break;
                 case "date_desc":
                     clients = clients.OrderByDescending(c => c.EnrollmentDate);
+                    break;
+                case "secret":
+                    clients = clients.OrderBy(c => c.Secret);
+                    break;
+                case "secret_desc":
+                    clients = clients.OrderByDescending(c => c.Secret);
                     break;
                 default:
                     clients = clients.OrderBy(c => c.LastName);
